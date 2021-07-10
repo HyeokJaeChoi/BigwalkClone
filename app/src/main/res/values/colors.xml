@@ -10,4 +10,6 @@
     <color name="text_unselected">#FF616161</color>
     <color name="primary">#FF5374B2</color>
     <color name="background">#FFF7F8FA</color>
+    <color name="campaign_type_open">#FF00A39E</color>
+    <color name="campaign_type_group">#FFA30005</color>
 </resources>
