@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:tabMode="fixed"
-            app:tabTextColor="@color/gray"
+            app:tabTextColor="@color/text_unselected"
             app:tabSelectedTextColor="@color/black"
             app:tabGravity="center">
 
