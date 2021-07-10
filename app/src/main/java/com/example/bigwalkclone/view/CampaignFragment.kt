@@ -1,6 +1,5 @@
 package com.example.bigwalkclone.view
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import com.example.bigwalkclone.R
 import com.example.bigwalkclone.databinding.CampaignFragmentBinding
+import com.example.bigwalkclone.viewmodel.CampaignViewModel
 
 class CampaignFragment : Fragment() {
     companion object {
