@@ -12,4 +12,7 @@
     <color name="background">#FFF7F8FA</color>
     <color name="campaign_type_open">#FF00A39E</color>
     <color name="campaign_type_group">#FFA30005</color>
+    <color name="campaign_done">#FFD66F7A</color>
+    <color name="campaign_donate_done">#FFACA3B8</color>
+    <color name="progress_background">#FFCBCCD3</color>
 </resources>

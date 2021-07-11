@@ -6,8 +6,11 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.bigwalkclone.R
 import com.example.bigwalkclone.databinding.CampaignItemBinding
 import com.example.bigwalkclone.model.CampaignModel
+import com.example.bigwalkclone.util.DateTimeUtil
 
 class CampaignAdapter() :
     PagingDataAdapter<CampaignModel, CampaignAdapter.CampaignViewHolder>(CampaignComparator) {
@@ -26,7 +29,47 @@ class CampaignAdapter() :
     class CampaignViewHolder(private val campaignBinding: CampaignItemBinding): RecyclerView.ViewHolder(campaignBinding.root) {
         fun bind(campaign: CampaignModel) {
             campaignBinding.run {
+                Glide.with(root)
+                    .load(campaign.smallListThumbnailImagePath)
+                    .into(campaignThumbnail)
 
+                campaignName.text = campaign.name
+                campaignPromoter.text = campaign.campaignPromoterModel.name
+
+                if(campaign.organizations.isEmpty()) {
+                    campaignTypeContainer.setCardBackgroundColor(root.context.resources.getColor(R.color.campaign_type_group, null))
+                    campaignType.text = root.context.getString(R.string.campaign_group)
+                }
+                else {
+                    campaignTypeContainer.setCardBackgroundColor(root.context.resources.getColor(R.color.campaign_type_open, null))
+                    campaignType.text = root.context.getString(R.string.campaign_open)
+                }
+
+                campaignProgressPercent.text = "${campaign.ratio}%"
+                campaignProgressBar.progress = campaign.ratio
+
+                if(DateTimeUtil.isCampaignActive(campaign.endDate)) {
+                    campaignStatus.also { textView ->
+                        textView.text = root.context.getString(R.string.campaign_in_progress)
+                        textView.setTextColor(root.context.resources.getColor(R.color.primary, null))
+                    }
+                    campaignDonateBtn.visibility = View.VISIBLE
+                }
+                else {
+                    if(campaign.myCampaignModel.story) {
+                        campaignStatus.also { textView ->
+                            textView.text = root.context.getString(R.string.campaign_donate_done)
+                            textView.setTextColor(root.context.resources.getColor(R.color.campaign_donate_done, null))
+                        }
+                        campaignDonateCompleted.visibility = View.VISIBLE
+                    }
+                    else {
+                        campaignStatus.also { textView ->
+                            textView.text = root.context.getString(R.string.campaign_done)
+                            textView.setTextColor(root.context.resources.getColor(R.color.campaign_done, null))
+                        }
+                    }
+                }
             }
         }
     }

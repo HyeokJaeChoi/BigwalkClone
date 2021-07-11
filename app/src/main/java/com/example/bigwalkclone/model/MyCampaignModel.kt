@@ -7,7 +7,7 @@ data class MyCampaignModel(
     @SerializedName("donatedSteps")
     val donatedSteps: Int,
     @SerializedName("lastDonatedDateTime")
-    val lastDonatedDateTime: String,
+    val lastDonatedDateTime: String?,
     @SerializedName("ranking")
     val ranking: Int,
     @SerializedName("story")

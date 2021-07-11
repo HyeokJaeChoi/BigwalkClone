@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bigwalkclone.R
 import com.example.bigwalkclone.adapter.CampaignAdapter
 import com.example.bigwalkclone.databinding.CampaignFragmentBinding
@@ -57,7 +58,10 @@ class CampaignFragment : Fragment() {
     }
 
     private fun initCampaignRecyclerView() {
-        binding.listCampaignAll.adapter = campaignAdapter
+        binding.listCampaignAll.run {
+            layoutManager = LinearLayoutManager(context)
+            adapter = campaignAdapter
+        }
     }
 
     private fun observeCampaignData() {

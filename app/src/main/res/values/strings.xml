@@ -3,4 +3,9 @@
     <string name="campaign">캠페인</string>
     <string name="post">포스트</string>
     <string name="my_campaign">내가 참여한 캠페인</string>
+    <string name="campaign_group">그룹형</string>
+    <string name="campaign_open">공개형</string>
+    <string name="campaign_in_progress">진행중</string>
+    <string name="campaign_done">종료</string>
+    <string name="campaign_donate_done">기부완료</string>
 </resources>

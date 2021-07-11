@@ -126,9 +126,10 @@
                     android:id="@+id/campaign_progress_bar"
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
-                    android:indeterminateTint="@color/primary"
-                    android:indeterminate="true"
+                    android:progressTint="@color/primary"
+                    android:progressBackgroundTint="@color/progress_background"
                     style="@android:style/Widget.ProgressBar.Horizontal"
+                    tools:progress="50"
                     />
 
             </androidx.cardview.widget.CardView>
@@ -142,6 +143,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/btn_donation_med_n"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/campaign_info_container"
         app:layout_constraintBottom_toBottomOf="@id/campaign_info_container"
