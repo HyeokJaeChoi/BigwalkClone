@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bigwalkclone.R
 import com.example.bigwalkclone.adapter.CampaignAdapter
 import com.example.bigwalkclone.databinding.CampaignFragmentBinding
+import com.example.bigwalkclone.decoration.MarginDecoration
 import com.example.bigwalkclone.viewmodel.CampaignViewModel
 
 class CampaignFragment : Fragment() {
@@ -61,6 +62,7 @@ class CampaignFragment : Fragment() {
         binding.listCampaignAll.run {
             layoutManager = LinearLayoutManager(context)
             adapter = campaignAdapter
+            addItemDecoration(MarginDecoration())
         }
     }
 
