@@ -7,8 +7,6 @@ object DateTimeUtil {
         val endDateTime = LocalDateTime.parse(endDate)
         val now = LocalDateTime.now()
 
-        return now.year <= endDateTime.year
-                && now.monthValue <= endDateTime.monthValue
-                && now.dayOfMonth <= endDateTime.dayOfMonth
+        return now.isBefore(endDateTime)
     }
 }

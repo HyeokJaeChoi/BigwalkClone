@@ -1,5 +1,6 @@
 package com.example.bigwalkclone.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ class CampaignAdapter() :
 
     override fun onBindViewHolder(holder: CampaignViewHolder, position: Int) {
         getItem(position)?.let { campaign ->
+            Log.d(javaClass.simpleName, "position: $position, campaign endDateTime: ${campaign.endDate}")
             holder.bind(campaign)
         }
     }
@@ -53,6 +55,13 @@ class CampaignAdapter() :
                         textView.text = root.context.getString(R.string.campaign_in_progress)
                         textView.setTextColor(root.context.resources.getColor(R.color.primary, null))
                     }
+
+                    campaignThumbnail.alpha = 1f
+                    campaignName.alpha = 1f
+                    campaignPromoter.alpha = 1f
+
+                    campaignDonateCompleted.visibility = View.INVISIBLE
+                    campaignDonateBtn.visibility = View.INVISIBLE
                 }
                 else {
                     if(campaign.myCampaignModel.story) {
@@ -68,6 +77,8 @@ class CampaignAdapter() :
                             textView.text = root.context.getString(R.string.campaign_done)
                             textView.setTextColor(root.context.resources.getColor(R.color.campaign_done, null))
                         }
+                        campaignDonateCompleted.visibility = View.INVISIBLE
+                        campaignDonateBtn.visibility = View.INVISIBLE
                     }
 
                     campaignThumbnail.alpha = 0.4f
