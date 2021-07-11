@@ -1,5 +1,6 @@
 package com.example.bigwalkclone.repository
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.bigwalkclone.model.CampaignModel
@@ -12,10 +13,17 @@ class CampaignDataSource: PagingSource<Int, CampaignModel>() {
         return try {
             val pageNumber = params.key ?: 0
             val campaigns = NetworkRequestFactory.campaignService.getCampaigns(page = pageNumber)
+            val nextKey = if(campaigns.size >= 20) {
+                pageNumber + 1
+            }
+            else {
+                null
+            }
+
             LoadResult.Page(
                 data = campaigns,
                 prevKey = null,
-                nextKey = pageNumber + 1
+                nextKey = nextKey,
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

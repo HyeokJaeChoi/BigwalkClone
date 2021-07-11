@@ -17,7 +17,7 @@ data class CampaignModel(
     @SerializedName("detailThumbnailImagePath")
     val detailThumbnailImagePath: String,
     @SerializedName("donatedSteps")
-    val donatedSteps: Int,
+    val donatedSteps: Long,
     @SerializedName("enabled")
     val enabled: Boolean,
     @SerializedName("endDate")
@@ -27,7 +27,7 @@ data class CampaignModel(
     @SerializedName("formattedStartDate")
     val formattedStartDate: String,
     @SerializedName("goalPoint")
-    val goalPoint: Int,
+    val goalPoint: Long,
     @SerializedName("id")
     val id: Int,
     @SerializedName("largeListThumbnailImagePath")
