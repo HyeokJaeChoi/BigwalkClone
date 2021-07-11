@@ -12,7 +12,7 @@ class CampaignViewModel : ViewModel() {
             config = PagingConfig(
                 pageSize = 20,
             ),
-            pagingSourceFactory = { CampaignDataSource() },
+            pagingSourceFactory = { CampaignDataSource(this) },
         ).flow.cachedIn(viewModelScope)
     }
 
@@ -30,5 +30,18 @@ class CampaignViewModel : ViewModel() {
                 campaign.organizations.isNotEmpty()
             }
         }
+    }
+
+    private val _myCampaigns: MutableLiveData<List<CampaignModel>> by lazy { MutableLiveData<List<CampaignModel>>() }
+    val myCampaigns: LiveData<List<CampaignModel>> get() = _myCampaigns
+
+    fun setMyCampaigns(newCampaigns: List<CampaignModel>) {
+        val prevMyCampaigns = _myCampaigns.value ?: emptyList()
+        val newMyCampaigns = mutableListOf<CampaignModel>().apply {
+            addAll(prevMyCampaigns)
+            addAll(newCampaigns)
+        }
+
+        _myCampaigns.postValue(newMyCampaigns)
     }
 }

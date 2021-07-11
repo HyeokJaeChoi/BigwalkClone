@@ -5,9 +5,10 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.bigwalkclone.model.CampaignModel
 import com.example.bigwalkclone.network.NetworkRequestFactory
+import com.example.bigwalkclone.viewmodel.CampaignViewModel
 import java.lang.Exception
 
-class CampaignDataSource: PagingSource<Int, CampaignModel>() {
+class CampaignDataSource(private val viewModel: CampaignViewModel): PagingSource<Int, CampaignModel>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CampaignModel> {
         return try {
@@ -19,6 +20,7 @@ class CampaignDataSource: PagingSource<Int, CampaignModel>() {
             else {
                 null
             }
+            viewModel.setMyCampaigns(campaigns.filter { campaign -> campaign.myCampaignModel.lastDonatedDateTime != null })
 
             LoadResult.Page(
                 data = campaigns,

@@ -16,6 +16,7 @@ import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bigwalkclone.R
 import com.example.bigwalkclone.adapter.CampaignAdapter
+import com.example.bigwalkclone.adapter.MyCampaignAdapter
 import com.example.bigwalkclone.databinding.CampaignFragmentBinding
 import com.example.bigwalkclone.decoration.MarginDecoration
 import com.example.bigwalkclone.model.CampaignModel
@@ -31,6 +32,7 @@ class CampaignFragment : Fragment() {
     private var _binding: CampaignFragmentBinding? = null
     private val binding get() = _binding!!
     private val campaignAdapter by lazy { CampaignAdapter() }
+    private val myCampaignAdapter by lazy { MyCampaignAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +47,7 @@ class CampaignFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initCampaignRecyclerView()
+        initMyCampaignRecyclerView()
         initCampaignFilter()
     }
 
@@ -84,6 +87,13 @@ class CampaignFragment : Fragment() {
         }
     }
 
+    private fun initMyCampaignRecyclerView() {
+        binding.listMyCampaign.run {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = myCampaignAdapter
+        }
+    }
+
     private fun observeCampaignData() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             val flowToCollect = when(binding.campaignListFilter.selectedItem.toString()) {
@@ -99,6 +109,10 @@ class CampaignFragment : Fragment() {
                 }
             }
         }
+
+        campaignViewModel.myCampaigns.observe(viewLifecycleOwner, { myCampaigns ->
+            myCampaignAdapter.submitList(myCampaigns)
+        })
     }
 
 }
