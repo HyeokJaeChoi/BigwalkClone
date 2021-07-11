@@ -10,12 +10,15 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bigwalkclone.R
 import com.example.bigwalkclone.adapter.CampaignAdapter
 import com.example.bigwalkclone.databinding.CampaignFragmentBinding
 import com.example.bigwalkclone.decoration.MarginDecoration
+import com.example.bigwalkclone.model.CampaignModel
 import com.example.bigwalkclone.viewmodel.CampaignViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 class CampaignFragment : Fragment() {
     companion object {
@@ -68,9 +71,9 @@ class CampaignFragment : Fragment() {
 
     private fun observeCampaignData() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            campaignViewModel.campaigns.observe(viewLifecycleOwner, Observer { pagingData ->
-                campaignAdapter.submitData(viewLifecycleOwner.lifecycle, pagingData)
-            })
+            campaignViewModel.campaigns.collectLatest {
+                campaignAdapter.submitData(it)
+            }
         }
     }
 
