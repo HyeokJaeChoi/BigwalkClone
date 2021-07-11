@@ -69,6 +69,10 @@ class CampaignAdapter() :
                             textView.setTextColor(root.context.resources.getColor(R.color.campaign_done, null))
                         }
                     }
+
+                    campaignThumbnail.alpha = 0.4f
+                    campaignName.alpha = 0.4f
+                    campaignPromoter.alpha = 0.4f
                 }
             }
         }
