@@ -37,12 +37,12 @@ class CampaignAdapter() :
                 campaignPromoter.text = campaign.campaignPromoterModel.name
 
                 if(campaign.organizations.isEmpty()) {
-                    campaignTypeContainer.setCardBackgroundColor(root.context.resources.getColor(R.color.campaign_type_group, null))
-                    campaignType.text = root.context.getString(R.string.campaign_group)
-                }
-                else {
                     campaignTypeContainer.setCardBackgroundColor(root.context.resources.getColor(R.color.campaign_type_open, null))
                     campaignType.text = root.context.getString(R.string.campaign_open)
+                }
+                else {
+                    campaignTypeContainer.setCardBackgroundColor(root.context.resources.getColor(R.color.campaign_type_group, null))
+                    campaignType.text = root.context.getString(R.string.campaign_group)
                 }
 
                 campaignProgressPercent.text = "${campaign.ratio}%"

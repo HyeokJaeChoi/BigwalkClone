@@ -15,4 +15,20 @@ class CampaignViewModel : ViewModel() {
             pagingSourceFactory = { CampaignDataSource() },
         ).flow.cachedIn(viewModelScope)
     }
+
+    val campaignsOpen: Flow<PagingData<CampaignModel>> by lazy {
+        campaigns.map { pagingData ->
+            pagingData.filter { campaign ->
+                campaign.organizations.isEmpty()
+            }
+        }
+    }
+
+    val campaignsGroup: Flow<PagingData<CampaignModel>> by lazy {
+        campaigns.map { pagingData ->
+            pagingData.filter { campaign ->
+                campaign.organizations.isNotEmpty()
+            }
+        }
+    }
 }

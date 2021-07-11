@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -42,9 +44,8 @@ class CampaignFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initCampaignFilter()
         initCampaignRecyclerView()
-        observeCampaignData()
+        initCampaignFilter()
     }
 
     override fun onDestroyView() {
@@ -59,6 +60,20 @@ class CampaignFragment : Fragment() {
                 binding.campaignListFilter.adapter = adapter
             }
         }
+        binding.campaignListFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                observeCampaignData()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Log.d(this@CampaignFragment.javaClass.simpleName, "onNothingSelected")
+            }
+        }
     }
 
     private fun initCampaignRecyclerView() {
@@ -71,8 +86,17 @@ class CampaignFragment : Fragment() {
 
     private fun observeCampaignData() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            campaignViewModel.campaigns.collectLatest {
-                campaignAdapter.submitData(it)
+            val flowToCollect = when(binding.campaignListFilter.selectedItem.toString()) {
+                getString(R.string.campaign_all) -> campaignViewModel.campaigns
+                getString(R.string.campaign_open) -> campaignViewModel.campaignsOpen
+                getString(R.string.campaign_group) -> campaignViewModel.campaignsGroup
+                else -> null
+            }
+
+            flowToCollect?.let { campaignFlow ->
+                campaignFlow.collectLatest {
+                    campaignAdapter.submitData(it)
+                }
             }
         }
     }
