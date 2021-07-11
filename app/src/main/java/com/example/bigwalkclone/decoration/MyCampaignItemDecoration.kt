@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class MarginDecoration(private val space: Int = 12): RecyclerView.ItemDecoration() {
+class MyCampaignItemDecoration(private val space: Int = 12): RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
         outRect: Rect,
         view: View,
@@ -12,8 +12,8 @@ class MarginDecoration(private val space: Int = 12): RecyclerView.ItemDecoration
         state: RecyclerView.State
     ) {
         with(outRect) {
-            top = space
-            bottom = space
+            left = space
+            right = space
         }
     }
 }

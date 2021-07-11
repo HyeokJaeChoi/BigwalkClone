@@ -53,7 +53,6 @@ class CampaignAdapter() :
                         textView.text = root.context.getString(R.string.campaign_in_progress)
                         textView.setTextColor(root.context.resources.getColor(R.color.primary, null))
                     }
-                    campaignDonateBtn.visibility = View.VISIBLE
                 }
                 else {
                     if(campaign.myCampaignModel.story) {
@@ -62,6 +61,7 @@ class CampaignAdapter() :
                             textView.setTextColor(root.context.resources.getColor(R.color.campaign_donate_done, null))
                         }
                         campaignDonateCompleted.visibility = View.VISIBLE
+                        campaignDonateBtn.visibility = View.VISIBLE
                     }
                     else {
                         campaignStatus.also { textView ->
