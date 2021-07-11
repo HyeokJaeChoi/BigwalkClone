@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.bigwalkclone.R
+import com.example.bigwalkclone.adapter.CampaignAdapter
 import com.example.bigwalkclone.databinding.CampaignFragmentBinding
 import com.example.bigwalkclone.viewmodel.CampaignViewModel
 
@@ -22,6 +23,7 @@ class CampaignFragment : Fragment() {
     private val campaignViewModel by viewModels<CampaignViewModel>()
     private var _binding: CampaignFragmentBinding? = null
     private val binding get() = _binding!!
+    private val campaignAdapter by lazy { CampaignAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,11 +38,8 @@ class CampaignFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initCampaignFilter()
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            campaignViewModel.campaigns.observe(viewLifecycleOwner, Observer { pagingData ->
-
-            })
-        }
+        initCampaignRecyclerView()
+        observeCampaignData()
     }
 
     override fun onDestroyView() {
@@ -54,6 +53,18 @@ class CampaignFragment : Fragment() {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.campaignListFilter.adapter = adapter
             }
+        }
+    }
+
+    private fun initCampaignRecyclerView() {
+        binding.listCampaignAll.adapter = campaignAdapter
+    }
+
+    private fun observeCampaignData() {
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            campaignViewModel.campaigns.observe(viewLifecycleOwner, Observer { pagingData ->
+                campaignAdapter.submitData(viewLifecycleOwner.lifecycle, pagingData)
+            })
         }
     }
 
