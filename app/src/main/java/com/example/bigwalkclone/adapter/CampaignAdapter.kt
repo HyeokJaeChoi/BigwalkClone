@@ -23,7 +23,6 @@ class CampaignAdapter() :
 
     override fun onBindViewHolder(holder: CampaignViewHolder, position: Int) {
         getItem(position)?.let { campaign ->
-            Log.d(javaClass.simpleName, "position: $position, campaign endDateTime: ${campaign.endDate}")
             holder.bind(campaign)
         }
     }
