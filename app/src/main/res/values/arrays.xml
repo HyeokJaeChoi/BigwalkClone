@@ -5,4 +5,8 @@
         <item>공개형</item>
         <item>그룹형</item>
     </string-array>
+    <string-array name="campaign_sort">
+        <item>없음</item>
+        <item>참여율 낮은 순</item>
+    </string-array>
 </resources>

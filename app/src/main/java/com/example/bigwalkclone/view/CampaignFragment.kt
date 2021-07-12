@@ -17,6 +17,7 @@ import com.example.bigwalkclone.adapter.MyCampaignAdapter
 import com.example.bigwalkclone.databinding.CampaignFragmentBinding
 import com.example.bigwalkclone.decoration.CampaignItemDecoration
 import com.example.bigwalkclone.decoration.MyCampaignItemDecoration
+import com.example.bigwalkclone.model.CampaignModel
 import com.example.bigwalkclone.viewmodel.CampaignViewModel
 import kotlinx.coroutines.flow.collectLatest
 
@@ -30,6 +31,8 @@ class CampaignFragment : Fragment() {
     private val binding get() = _binding!!
     private val campaignAdapter by lazy { CampaignAdapter() }
     private val myCampaignAdapter by lazy { MyCampaignAdapter() }
+    private var campaignSortCondition: Comparator<CampaignModel>? = null
+    private var campaignFilterCondition: (suspend (CampaignModel) -> Boolean)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +48,8 @@ class CampaignFragment : Fragment() {
 
         initCampaignRecyclerView()
         initMyCampaignRecyclerView()
-        initCampaignFilter()
+        initCampaignSortFilter()
+        initCampaignTypeFilter()
     }
 
     override fun onDestroyView() {
@@ -53,20 +57,62 @@ class CampaignFragment : Fragment() {
         _binding = null
     }
 
-    private fun initCampaignFilter() {
+    private fun initCampaignSortFilter() {
         context?.let { context ->
-            ArrayAdapter.createFromResource(context, R.array.campaign_filter, android.R.layout.simple_spinner_item).also { adapter ->
+            ArrayAdapter.createFromResource(context, R.array.campaign_sort, android.R.layout.simple_spinner_item).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                binding.campaignListFilter.adapter = adapter
+                binding.campaignSortFilter.adapter = adapter
             }
         }
-        binding.campaignListFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.campaignSortFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
                 id: Long
             ) {
+                campaignSortCondition = when(binding.campaignSortFilter.selectedItem.toString()) {
+                    getString(R.string.campaign_sort_option_none) -> null
+                    getString(R.string.campaign_sort_option_ratio_asc) -> Comparator { value1, value2 ->
+                        value1.ratio - value2.ratio
+                    }
+                    else -> null
+                }
+
+                observeCampaignData()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+    }
+
+    private fun initCampaignTypeFilter() {
+        context?.let { context ->
+            ArrayAdapter.createFromResource(context, R.array.campaign_filter, android.R.layout.simple_spinner_item).also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.campaignTypeFilter.adapter = adapter
+            }
+        }
+        binding.campaignTypeFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                campaignFilterCondition = when(binding.campaignTypeFilter.selectedItem.toString()) {
+                    getString(R.string.campaign_all) -> null
+                    getString(R.string.campaign_open) -> { campaign ->
+                        campaign.organizations.isEmpty()
+                    }
+                    getString(R.string.campaign_group) -> { campaign ->
+                        campaign.organizations.isNotEmpty()
+                    }
+                    else -> null
+                }
+
                 observeCampaignData()
             }
 
@@ -94,22 +140,13 @@ class CampaignFragment : Fragment() {
 
     private fun observeCampaignData() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            val flowToCollect = when(binding.campaignListFilter.selectedItem.toString()) {
-                getString(R.string.campaign_all) -> campaignViewModel.campaigns
-                getString(R.string.campaign_open) -> campaignViewModel.campaignsOpen
-                getString(R.string.campaign_group) -> campaignViewModel.campaignsGroup
-                else -> null
-            }
-
-            flowToCollect?.let { campaignFlow ->
-                campaignFlow.collectLatest {
-                    campaignAdapter.submitData(it)
-                }
+            campaignViewModel.getCampaign(sortCondition = campaignSortCondition, filterCondition = campaignFilterCondition).collectLatest { pagingData ->
+                campaignAdapter.submitData(pagingData)
             }
         }
 
         campaignViewModel.myCampaigns.observe(viewLifecycleOwner, { myCampaigns ->
-            myCampaignAdapter.submitList(myCampaigns)
+            myCampaignAdapter.submitList(myCampaigns.toList())
         })
     }
 

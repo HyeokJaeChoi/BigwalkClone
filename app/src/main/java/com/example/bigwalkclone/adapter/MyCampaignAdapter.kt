@@ -36,6 +36,9 @@ class MyCampaignAdapter: ListAdapter<CampaignModel, MyCampaignAdapter.MyCampaign
                 if(campaign.myCampaignModel.story) {
                     myCampaignDonateDone.visibility = View.VISIBLE
                 }
+                else {
+                    myCampaignDonateDone.visibility = View.INVISIBLE
+                }
             }
         }
     }

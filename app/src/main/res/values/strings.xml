@@ -9,4 +9,6 @@
     <string name="campaign_in_progress">진행중</string>
     <string name="campaign_done">종료</string>
     <string name="campaign_donate_done">기부완료</string>
+    <string name="campaign_sort_option_none">없음</string>
+    <string name="campaign_sort_option_ratio_asc">참여율 낮은 순</string>
 </resources>

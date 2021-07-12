@@ -31,15 +31,15 @@ data class CampaignModel(
     @SerializedName("id")
     val id: Int,
     @SerializedName("largeListThumbnailImagePath")
-    val largeListThumbnailImagePath: Any,
+    val largeListThumbnailImagePath: String?,
     @SerializedName("mediumListThumbnailImagePath")
-    val mediumListThumbnailImagePath: Any,
+    val mediumListThumbnailImagePath: String?,
     @SerializedName("my")
     val myCampaignModel: MyCampaignModel,
     @SerializedName("name")
     val name: String,
     @SerializedName("organizations")
-    val organizations: List<Any>,
+    val organizations: List<OrganizationsModel>,
     @SerializedName("participantCount")
     val participantCount: Int,
     @SerializedName("ratio")
@@ -55,5 +55,11 @@ data class CampaignModel(
     @SerializedName("startDate")
     val startDate: String,
     @SerializedName("status")
-    val status: String
+    val status: String,
+    @SerializedName("service")
+    val service: ServiceModel?,
+    @SerializedName("event")
+    val event: Any?,
+    @SerializedName("additionalServiceId")
+    val additionalServiceId: Int?,
 )

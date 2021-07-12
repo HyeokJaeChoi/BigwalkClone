@@ -8,22 +8,34 @@ import com.example.bigwalkclone.network.NetworkRequestFactory
 import com.example.bigwalkclone.viewmodel.CampaignViewModel
 import java.lang.Exception
 
-class CampaignDataSource(private val viewModel: CampaignViewModel): PagingSource<Int, CampaignModel>() {
+class CampaignDataSource(
+    private val viewModel: CampaignViewModel,
+    private val sortCondition: Comparator<CampaignModel>? = null,
+    private val pageSize: Int
+) : PagingSource<Int, CampaignModel>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CampaignModel> {
         return try {
             val pageNumber = params.key ?: 0
-            val campaigns = NetworkRequestFactory.campaignService.getCampaigns(page = pageNumber)
-            val nextKey = if(campaigns.size >= 20) {
+            val campaigns = NetworkRequestFactory.campaignService.getCampaigns(page = pageNumber, size = pageSize)
+            val nextKey = if(campaigns.size >= pageSize) {
                 pageNumber + 1
             }
             else {
                 null
             }
+
             viewModel.setMyCampaigns(campaigns.filter { campaign -> campaign.myCampaignModel.lastDonatedDateTime != null })
 
+            val campaignsSorted = if(sortCondition != null) {
+                campaigns.sortedWith(sortCondition)
+            }
+            else {
+                campaigns
+            }
+
             LoadResult.Page(
-                data = campaigns,
+                data = campaignsSorted,
                 prevKey = null,
                 nextKey = nextKey,
             )
