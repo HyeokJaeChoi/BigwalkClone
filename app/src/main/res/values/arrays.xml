@@ -9,4 +9,11 @@
         <item>없음</item>
         <item>참여율 낮은 순</item>
     </string-array>
+    <string-array name="campaign_category">
+        <item>전체</item>
+        <item>노인</item>
+        <item>지구촌</item>
+        <item>환경</item>
+        <item>장애인</item>
+    </string-array>
 </resources>

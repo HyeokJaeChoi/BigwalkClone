@@ -14,12 +14,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bigwalkclone.R
 import com.example.bigwalkclone.adapter.CampaignAdapter
+import com.example.bigwalkclone.adapter.CampaignCategoryAdapter
 import com.example.bigwalkclone.adapter.MyCampaignAdapter
 import com.example.bigwalkclone.databinding.CampaignFragmentBinding
 import com.example.bigwalkclone.decoration.CampaignItemDecoration
 import com.example.bigwalkclone.decoration.MyCampaignItemDecoration
+import com.example.bigwalkclone.model.CampaignCategoryModel
 import com.example.bigwalkclone.model.CampaignModel
 import com.example.bigwalkclone.viewmodel.CampaignViewModel
+import com.example.bigwalkclone.viewmodel.factory.CampaignViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 
 class CampaignFragment : Fragment() {
@@ -27,11 +30,19 @@ class CampaignFragment : Fragment() {
         fun newInstance() = CampaignFragment()
     }
 
-    private val campaignViewModel by viewModels<CampaignViewModel>()
+    private val campaignViewModel by viewModels<CampaignViewModel> {
+        val category = resources.getStringArray(R.array.campaign_category)
+        CampaignViewModelFactory(category)
+    }
     private var _binding: CampaignFragmentBinding? = null
     private val binding get() = _binding!!
     private val campaignAdapter by lazy { CampaignAdapter() }
     private val myCampaignAdapter by lazy { MyCampaignAdapter() }
+    private val campaignCategoryAdapter by lazy {
+        CampaignCategoryAdapter() { position ->
+            campaignViewModel.selectCategory(position)
+        }
+    }
     private var campaignSortCondition: Comparator<CampaignModel>? = null
     private var campaignFilterCondition: (suspend (CampaignModel) -> Boolean)? = null
 
@@ -49,9 +60,11 @@ class CampaignFragment : Fragment() {
 
         initCampaignRecyclerView()
         initMyCampaignRecyclerView()
+        initCampaignCategoryAdapter()
         initCampaignSortFilter()
         initCampaignTypeFilter()
         observeCampaignData()
+        observeCampaignCategory()
     }
 
     override fun onDestroyView() {
@@ -142,6 +155,13 @@ class CampaignFragment : Fragment() {
         }
     }
 
+    private fun initCampaignCategoryAdapter() {
+        binding.listCampaignCategory.run {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = campaignCategoryAdapter
+        }
+    }
+
     private fun observeCampaignData() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             campaignViewModel.getCampaign(sortCondition = campaignSortCondition, filterCondition = campaignFilterCondition).collectLatest { pagingData ->
@@ -151,6 +171,12 @@ class CampaignFragment : Fragment() {
 
         campaignViewModel.myCampaigns.observe(viewLifecycleOwner, { myCampaigns ->
             myCampaignAdapter.submitList(myCampaigns.toList())
+        })
+    }
+
+    private fun observeCampaignCategory() {
+        campaignViewModel.categories.observe(viewLifecycleOwner, {
+            campaignCategoryAdapter.submitList(it)
         })
     }
 
