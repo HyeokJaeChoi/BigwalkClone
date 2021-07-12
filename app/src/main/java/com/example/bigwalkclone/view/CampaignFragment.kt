@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
@@ -50,6 +51,7 @@ class CampaignFragment : Fragment() {
         initMyCampaignRecyclerView()
         initCampaignSortFilter()
         initCampaignTypeFilter()
+        observeCampaignData()
     }
 
     override fun onDestroyView() {
@@ -62,6 +64,7 @@ class CampaignFragment : Fragment() {
             ArrayAdapter.createFromResource(context, R.array.campaign_sort, android.R.layout.simple_spinner_item).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.campaignSortFilter.adapter = adapter
+                binding.campaignSortFilter.setSelection(Adapter.NO_SELECTION, false)
             }
         }
         binding.campaignSortFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -93,6 +96,7 @@ class CampaignFragment : Fragment() {
             ArrayAdapter.createFromResource(context, R.array.campaign_filter, android.R.layout.simple_spinner_item).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.campaignTypeFilter.adapter = adapter
+                binding.campaignTypeFilter.setSelection(Adapter.NO_SELECTION, false)
             }
         }
         binding.campaignTypeFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -117,7 +121,7 @@ class CampaignFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                Log.d(this@CampaignFragment.javaClass.simpleName, "onNothingSelected")
+                TODO("Not yet implemented")
             }
         }
     }
